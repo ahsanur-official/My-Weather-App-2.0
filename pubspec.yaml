@@ -26,7 +26,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/cloudy.json
+    - assets/cloudy.json 
     - assets/rain.json
     - assets/snow.json
     - assets/sunny.json
