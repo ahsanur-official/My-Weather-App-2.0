@@ -3,20 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:myapp/models/weather_model.dart';
 
 class WeatherServices {
-  final String apiKey = '1695da0ffb036e82360dda8d7f0deb9c'; // Your OpenWeatherMap API key
+  final String apiKey =
+      '1695da0ffb036e82360dda8d7f0deb9c'; // Your OpenWeatherMap API key
 
-  Future<Weather> fetchWeather(String cityName) async {
-    final url =
-        'https://api.openweathermap.org/data/2.5/weather?q=$cityName&units=metric&appid=$apiKey';
-
-    final response = await http.get(Uri.parse(url));
+  Future<Weather> fetchWeather(String city) async {
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric'));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return Weather.fromJson(data);
+      final jsonData = json.decode(response.body);
+      return Weather.fromJson(jsonData);
     } else {
-      final error = json.decode(response.body)['message'] ?? 'Unknown error';
-      throw Exception('Failed to load weather: $error');
+      throw Exception('Failed to load weather');
     }
   }
 

@@ -38,20 +38,29 @@ class Weather {
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       cityName: json['name'] ?? '',
-      country: json['sys']['country'] ?? '',
+      country: json['sys'] != null ? json['sys']['country'] ?? '' : '',
       temperature: (json['main']['temp'] as num).toDouble(),
       feelsLike: (json['main']['feels_like'] as num).toDouble(),
-      description: json['weather'][0]['description'],
-      iconCode: json['weather'][0]['icon'],
+      description: (json['weather'] != null && json['weather'].isNotEmpty)
+          ? json['weather'][0]['description']
+          : '',
+      iconCode: (json['weather'] != null && json['weather'].isNotEmpty)
+          ? json['weather'][0]['icon']
+          : '',
       humidity: json['main']['humidity'],
       pressure: json['main']['pressure'],
       windSpeed: (json['wind']['speed'] as num).toDouble(),
       visibility: json['visibility'] ?? 0,
-      sunrise:
-          DateTime.fromMillisecondsSinceEpoch(json['sys']['sunrise'] * 1000),
-      sunset: DateTime.fromMillisecondsSinceEpoch(json['sys']['sunset'] * 1000),
+      sunrise: DateTime.fromMillisecondsSinceEpoch(
+              json['sys']['sunrise'] * 1000,
+              isUtc: true)
+          .toLocal(),
+      sunset: DateTime.fromMillisecondsSinceEpoch(json['sys']['sunset'] * 1000,
+              isUtc: true)
+          .toLocal(),
       latitude: (json['coord']['lat'] as num).toDouble(),
       longitude: (json['coord']['lon'] as num).toDouble(),
+      dateTimestamp: 0, // For current weather, no dateTimestamp
     );
   }
 
@@ -76,8 +85,6 @@ class Weather {
   }
 
   String get iconUrl => "https://openweathermap.org/img/wn/$iconCode@2x.png";
-
-  get city => null;
 
   String formatTime(DateTime time) {
     return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";

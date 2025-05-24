@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -45,25 +44,29 @@ class WeatherCard extends StatelessWidget {
 
   Widget _infoItem(String label, String value, IconData icon) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 150),
+      constraints: const BoxConstraints(maxWidth: 160), // a bit wider
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18), // a bit more padding
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.18),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           children: [
-            Icon(icon, color: Colors.white70, size: 32, semanticLabel: label),
-            const SizedBox(height: 10),
+            Icon(icon,
+                color: Colors.white70,
+                size: 36,
+                semanticLabel: label), // bigger icon
+            const SizedBox(height: 12), // more space
             Text(label,
-                style: const TextStyle(color: Colors.white70, fontSize: 16)),
-            const SizedBox(height: 6),
+                style: const TextStyle(
+                    color: Colors.white70, fontSize: 18)), // bigger label text
+            const SizedBox(height: 8),
             Text(
               value,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 22, // bigger value text
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -77,7 +80,7 @@ class WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 6,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       color: Colors.white.withOpacity(0.28),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
@@ -87,42 +90,42 @@ class WeatherCard extends StatelessWidget {
           children: [
             Lottie.asset(
               lottieAsset,
-              height: 160,
+              height: 180, // increased from 160 to 180
               errorBuilder: (context, error, stackTrace) => const Icon(
                 Icons.error,
                 size: 64,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20), // increased space
             Text(
               weather.city ?? 'Unknown City',
               style: GoogleFonts.roboto(
-                fontSize: 36,
+                fontSize: 40, // increased from 36
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 14), // increased from 10
             Text(
               weather.description ?? 'No description',
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 26, // increased from 24
                 color: Colors.white70,
                 fontStyle: FontStyle.italic,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24), // increased from 20
             Text(
               '${weather.temperature.toStringAsFixed(1)} °C',
               style: const TextStyle(
-                fontSize: 64,
+                fontSize: 72, // increased from 64
                 color: Colors.white,
                 fontWeight: FontWeight.w300,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 48), // increased from 40
             Wrap(
               spacing: 20,
               runSpacing: 20,
