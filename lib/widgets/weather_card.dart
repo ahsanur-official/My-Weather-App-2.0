@@ -1,148 +1,147 @@
-import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:myapp/models/weather_model.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:intl/intl.dart';
+
+class Weather {
+  final String? city;
+  final String? description;
+  final double temperature;
+  final int humidity;
+  final double windSpeed;
+  final int pressure;
+  final int visibility;
+  final DateTime? sunrise;
+  final DateTime? sunset;
+
+  Weather({
+    this.city,
+    this.description,
+    required this.temperature,
+    required this.humidity,
+    required this.windSpeed,
+    required this.pressure,
+    required this.visibility,
+    this.sunrise,
+    this.sunset,
+  });
+}
 
 class WeatherCard extends StatelessWidget {
   final Weather weather;
-  const WeatherCard({super.key, required this.weather});
+  final String lottieAsset;
 
-  // Format DateTime into readable time string
-  String formatTime(DateTime time) => DateFormat('hh:mm a').format(time);
+  const WeatherCard({
+    super.key,
+    required this.weather,
+    required this.lottieAsset,
+  });
 
-  // Select Lottie animation based on weather description
-  String getLottieAsset(String description) {
-    final desc = description.toLowerCase();
-    if (desc.contains('rain')) return 'assets/rain.json';
-    if (desc.contains('clear')) return 'assets/sunny.json';
-    if (desc.contains('cloud')) return 'assets/cloudy.json';
-    if (desc.contains('snow')) return 'assets/snowfall.json';
-    return 'assets/cloudy.json';
+  String _formatTime(DateTime? dateTime) {
+    if (dateTime == null) return '--:--';
+    return DateFormat.jm().format(dateTime);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          0.2,
-        ), // Adjust for better contrast if needed
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
-        ],
-      ),
-      child: Column(
-        children: [
-          Lottie.asset(
-            getLottieAsset(weather.description),
-            height: 150,
-            width: 150,
-            fit: BoxFit.cover,
-          ),
-          Text(
-            '${weather.cityName}, ${weather.country}',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+  Widget _infoItem(String label, String value, IconData icon) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 150),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.18),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: Colors.white70, size: 32, semanticLabel: label),
+            const SizedBox(height: 10),
+            Text(label,
+                style: const TextStyle(color: Colors.white70, fontSize: 16)),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            '${weather.temperature.toStringAsFixed(1)}°C',
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Text(
-            'Feels like: ${weather.feelsLike.toStringAsFixed(1)}°C',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            weather.description[0].toUpperCase() +
-                weather.description.substring(1),
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 20),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _infoTile(
-                'Humidity',
-                '${weather.humidity}%',
-                Icons.water_drop,
-                Colors.cyanAccent,
-              ),
-              _infoTile(
-                'Wind',
-                '${weather.windSpeed} m/s',
-                Icons.air,
-                Colors.lightBlueAccent,
-              ),
-              _infoTile(
-                'Pressure',
-                '${weather.pressure} hPa',
-                Icons.compress,
-                Colors.orangeAccent,
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _infoTile(
-                'Sunrise',
-                formatTime(weather.sunrise),
-                Icons.wb_sunny,
-                Colors.amber,
-              ),
-              _infoTile(
-                'Sunset',
-                formatTime(weather.sunset),
-                Icons.nightlight_round,
-                Colors.deepPurpleAccent,
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.visibility, color: Colors.white70),
-              const SizedBox(width: 8),
-              Text(
-                'Visibility: ${weather.visibility ~/ 1000} km',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _infoTile(String label, String value, IconData icon, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white70)),
-        Text(value, style: const TextStyle(color: Colors.white)),
-      ],
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 6,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+      color: Colors.white.withOpacity(0.28),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              lottieAsset,
+              height: 160,
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.error,
+                size: 64,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              weather.city ?? 'Unknown City',
+              style: GoogleFonts.roboto(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              weather.description ?? 'No description',
+              style: const TextStyle(
+                fontSize: 24,
+                color: Colors.white70,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '${weather.temperature.toStringAsFixed(1)} °C',
+              style: const TextStyle(
+                fontSize: 64,
+                color: Colors.white,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(height: 40),
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: [
+                _infoItem('Humidity', '${weather.humidity}%', Icons.water_drop),
+                _infoItem('Wind', '${weather.windSpeed} m/s', Icons.air),
+                _infoItem('Pressure', '${weather.pressure} hPa', Icons.speed),
+                _infoItem('Visibility', '${weather.visibility} m',
+                    Icons.remove_red_eye),
+                _infoItem(
+                    'Sunrise', _formatTime(weather.sunrise), Icons.wb_twilight),
+                _infoItem('Sunset', _formatTime(weather.sunset),
+                    Icons.nightlight_round),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

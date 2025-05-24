@@ -12,15 +12,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Weather App',
+      title: 'Weather App 2.0',
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Roboto',
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF5C6BC0), // aesthetic indigo
+          seedColor: const Color(0xFF5C6BC0),
           brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: const Color(0xFFF1F4FF), // soft background
+        scaffoldBackgroundColor: const Color(0xFFF1F4FF),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF5C6BC0),
           elevation: 0,
@@ -30,20 +30,6 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           iconTheme: IconThemeData(color: Colors.white),
-        ),
-        cardTheme: const CardThemeData(
-          color: Colors.white,
-          surfaceTintColor: Colors.white,
-          shadowColor: Colors.black26,
-          elevation: 6,
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.black87, fontSize: 18),
-          bodyMedium: TextStyle(color: Colors.black54, fontSize: 16),
         ),
       ),
       home: const HomeScreen(),
